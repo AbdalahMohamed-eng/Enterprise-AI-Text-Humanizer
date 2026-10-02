@@ -47,20 +47,20 @@
     <!-- DaisyUI CDN -->
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4/dist/full.min.css" rel="stylesheet" type="text/css" />
     
-    <!-- Alpine.js -->
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
-    
-    <!-- jsdiff -->
-    <script src="https://cdn.jsdelivr.net/npm/diff/dist/diff.min.js"></script>
-    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/static/css/custom.css">
+
+    <!-- jsdiff CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/diff/dist/diff.min.js"></script>
+
+    <!-- Custom Application JS (LOADED BEFORE ALPINE) -->
+    <script src="/static/js/diff.js"></script>
+    <script src="/static/js/app.js"></script>
     
-    <!-- Custom JS -->
-    <script defer src="/static/js/app.js"></script>
-    <script defer src="/static/js/diff.js"></script>
+    <!-- Alpine.js (Loaded with defer AFTER app.js has registered components) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
 </head>
-<body class="min-h-screen bg-[#FBF9F5] text-zinc-900 font-sans antialiased selection:bg-gold-200 selection:text-gold-900">
+<body class="min-h-screen bg-[#F8F7F4] text-zinc-900 font-sans antialiased selection:bg-gold-200 selection:text-gold-900">
     {% block content %}{% endblock %}
 </body>
 </html>

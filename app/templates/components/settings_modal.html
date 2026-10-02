@@ -1,5 +1,5 @@
-<dialog id="settings_modal" class="modal" :class="{'modal-open': showSettings}">
-    <div class="modal-box bg-white border border-[#DFCEAA] shadow-2xl max-w-lg rounded-2xl p-6 text-zinc-900">
+<div id="settings_modal" class="modal z-50" :class="{'modal-open': showSettings}" x-show="showSettings" style="display: none;">
+    <div class="modal-box bg-white border border-[#DFCEAA] shadow-2xl max-w-lg rounded-2xl p-6 text-zinc-900 relative z-10">
         
         <!-- Modal Header -->
         <div class="flex items-center justify-between pb-4 border-b border-[#EBE4D5]">
@@ -156,7 +156,5 @@
 
     </div>
     
-    <form method="dialog" class="modal-backdrop bg-zinc-900/50 backdrop-blur-sm">
-        <button @click="showSettings = false">close</button>
-    </form>
-</dialog>
+    <div class="modal-backdrop bg-zinc-900/50 backdrop-blur-sm fixed inset-0 z-0" @click="showSettings = false"></div>
+</div>

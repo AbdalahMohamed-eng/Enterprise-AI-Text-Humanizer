@@ -1,5 +1,6 @@
-document.addEventListener('alpine:init', () => {
-  Alpine.data('humanizerApp', () => ({
+// AURA Humanizer Alpine Data Component
+function createHumanizerApp() {
+  return {
     // Content State
     inputText: '',
     outputText: '',
@@ -14,7 +15,7 @@ document.addEventListener('alpine:init', () => {
     provider: 'groq',
     model: 'groq/llama-3.3-70b-versatile',
     showSettings: false,
-    activeTab: 'workspace', // 'workspace' | 'detectors' | 'architecture'
+    activeTab: 'workspace',
     
     // Detection & Telemetry
     isDetecting: false,
@@ -69,13 +70,13 @@ document.addEventListener('alpine:init', () => {
 
     // Computed Properties
     get inputWordCount() { 
-      return this.inputText.trim() ? this.inputText.trim().split(/\s+/).length : 0; 
+      return this.inputText && this.inputText.trim() ? this.inputText.trim().split(/\s+/).length : 0; 
     },
     get inputCharCount() { 
-      return this.inputText.length; 
+      return this.inputText ? this.inputText.length : 0; 
     },
     get outputWordCount() { 
-      return this.outputText.trim() ? this.outputText.trim().split(/\s+/).length : 0; 
+      return this.outputText && this.outputText.trim() ? this.outputText.trim().split(/\s+/).length : 0; 
     },
     get currentModels() { 
       return this.availableModels[this.provider] || []; 
@@ -106,7 +107,9 @@ document.addEventListener('alpine:init', () => {
     init() {
       this.updateModel();
       this.$watch('provider', () => this.updateModel());
-      document.documentElement.setAttribute('data-theme', 'light');
+      if (typeof document !== 'undefined') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
     },
     
     updateModel() {
@@ -128,12 +131,16 @@ document.addEventListener('alpine:init', () => {
     
     async pasteInput() {
       try {
-        const text = await navigator.clipboard.readText();
-        if (text) {
-          this.inputText = text;
+        if (navigator.clipboard && navigator.clipboard.readText) {
+          const text = await navigator.clipboard.readText();
+          if (text) {
+            this.inputText = text;
+          }
+        } else {
+          alert('Clipboard paste access not supported by browser. Please paste with Ctrl+V / Cmd+V.');
         }
       } catch (err) {
-        console.warn('Clipboard access denied, fallback to manual paste.');
+        alert('Clipboard permission denied. Please paste with Ctrl+V / Cmd+V.');
       }
     },
     
@@ -157,10 +164,10 @@ document.addEventListener('alpine:init', () => {
     },
     
     saveApiKeys() {
-      localStorage.setItem('humanizer_openai_key', this.apiKeys.openai);
-      localStorage.setItem('humanizer_gemini_key', this.apiKeys.gemini);
-      localStorage.setItem('humanizer_groq_key', this.apiKeys.groq);
-      localStorage.setItem('humanizer_sapling_key', this.apiKeys.sapling);
+      localStorage.setItem('humanizer_openai_key', this.apiKeys.openai || '');
+      localStorage.setItem('humanizer_gemini_key', this.apiKeys.gemini || '');
+      localStorage.setItem('humanizer_groq_key', this.apiKeys.groq || '');
+      localStorage.setItem('humanizer_sapling_key', this.apiKeys.sapling || '');
       this.showSettings = false;
     },
     
@@ -173,7 +180,7 @@ document.addEventListener('alpine:init', () => {
     },
     
     async startHumanization() {
-      if (!this.inputText.trim() || this.isStreaming) return;
+      if (!this.inputText || !this.inputText.trim() || this.isStreaming) return;
       this.outputText = '';
       this.showDiff = false;
       this.diffHtml = '';
@@ -183,9 +190,9 @@ document.addEventListener('alpine:init', () => {
       
       const headers = {
         'Content-Type': 'application/json',
-        'X-OpenAI-Key': this.apiKeys.openai,
-        'X-Gemini-Key': this.apiKeys.gemini,
-        'X-Groq-Key': this.apiKeys.groq
+        'X-OpenAI-Key': this.apiKeys.openai || '',
+        'X-Gemini-Key': this.apiKeys.gemini || '',
+        'X-Groq-Key': this.apiKeys.groq || ''
       };
       
       try {
@@ -204,7 +211,7 @@ document.addEventListener('alpine:init', () => {
         
         if (!response.ok) {
           const err = await response.json().catch(() => ({}));
-          alert(err.detail || 'Processing failed. Please confirm that your API key is correctly configured in API Settings.');
+          alert(err.detail || 'Processing failed. Please check your API key in Settings.');
           this.isStreaming = false;
           return;
         }
@@ -228,28 +235,27 @@ document.addEventListener('alpine:init', () => {
           }
         }
 
-        // Automatically run multi-detector verification once output completes
+        // Run multi-detector verification once output completes
         this.runFullDetectorAudit();
 
       } catch (err) {
         console.error('Streaming error:', err);
-        alert('Stream connection interrupted: ' + err.message);
+        alert('Connection error occurred: ' + err.message);
       } finally {
         this.isStreaming = false;
       }
     },
     
     async runFullDetectorAudit() {
-      if (!this.inputText.trim()) return;
+      if (!this.inputText || !this.inputText.trim()) return;
       this.isDetecting = true;
       
       const headers = {
         'Content-Type': 'application/json',
-        'X-Sapling-Key': this.apiKeys.sapling
+        'X-Sapling-Key': this.apiKeys.sapling || ''
       };
 
       try {
-        // Query backend detection endpoint
         const inputResp = await fetch('/api/v1/detect', {
           method: 'POST',
           headers,
@@ -264,7 +270,7 @@ document.addEventListener('alpine:init', () => {
         this.inputAiScore = Math.min(100, Math.max(70, Math.round(baseInputScore)));
 
         let baseOutputScore = 2.4;
-        if (this.outputText.trim() && this.outputText.trim().length >= 40) {
+        if (this.outputText && this.outputText.trim() && this.outputText.trim().length >= 40) {
           const outputResp = await fetch('/api/v1/detect', {
             method: 'POST',
             headers,
@@ -277,7 +283,7 @@ document.addEventListener('alpine:init', () => {
         }
         this.outputAiScore = Math.min(15, Math.max(0, Math.round(baseOutputScore)));
 
-        // Populate Multi-Detector Benchmark Matrix
+        // Multi-Detector Benchmark Matrix
         this.detectorMatrix = [
           { id: 'gptzero', name: 'GPTZero v3', originalScore: this.inputAiScore, humanizedScore: Math.min(4, this.outputAiScore), status: 'passed' },
           { id: 'turnitin', name: 'Turnitin (iThenticate)', originalScore: Math.min(100, this.inputAiScore + 2), humanizedScore: Math.min(2, this.outputAiScore), status: 'passed' },
@@ -311,6 +317,7 @@ document.addEventListener('alpine:init', () => {
     },
     
     escapeHtml(unsafe) {
+      if (!unsafe) return '';
       return unsafe
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -341,5 +348,23 @@ document.addEventListener('alpine:init', () => {
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
     }
-  }));
-});
+  };
+}
+
+// Global Registration for Alpine.js
+if (typeof window !== 'undefined') {
+  window.humanizerApp = createHumanizerApp;
+}
+
+if (typeof document !== 'undefined') {
+  document.addEventListener('alpine:init', () => {
+    if (typeof window !== 'undefined' && window.Alpine) {
+      window.Alpine.data('humanizerApp', createHumanizerApp);
+    }
+  });
+
+  // If Alpine loaded before this script
+  if (typeof window !== 'undefined' && window.Alpine) {
+    window.Alpine.data('humanizerApp', createHumanizerApp);
+  }
+}
