@@ -219,28 +219,67 @@ function createHumanizerApp() {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
+        let streamError = null;
         
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
           buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n\n');
-          buffer = lines.pop();
-          for (const line of lines) {
-            if (line.startsWith('data: ')) {
-              const data = line.slice(6);
-              if (data === '[DONE]') break;
-              this.outputText += data;
+          
+          // Split on double-newline (SSE event boundary)
+          const events = buffer.split('\n\n');
+          buffer = events.pop(); // Keep incomplete event in buffer
+          
+          for (const eventBlock of events) {
+            const lines = eventBlock.split('\n');
+            let eventType = 'message';
+            let eventData = '';
+            
+            for (const line of lines) {
+              if (line.startsWith('event: ')) {
+                eventType = line.slice(7).trim();
+              } else if (line.startsWith('data: ')) {
+                eventData = line.slice(6);
+              }
+            }
+            
+            if (eventType === 'error') {
+              // LLM returned an error inside the stream
+              streamError = eventData || 'Unknown LLM error occurred.';
+              break;
+            }
+            
+            if (eventData === '[DONE]') {
+              break;
+            }
+            
+            if (eventData) {
+              this.outputText += eventData;
             }
           }
+          
+          if (streamError) break;
         }
-
-        // Run multi-detector verification once output completes
-        this.runFullDetectorAudit();
+        
+        if (streamError) {
+          // Show user-friendly error message
+          let friendlyMsg = streamError;
+          if (streamError.includes('Invalid API Key') || streamError.includes('invalid_api_key')) {
+            friendlyMsg = 'Invalid API key. Please go to API Settings and enter a valid key for the selected provider.';
+          } else if (streamError.includes('rate_limit') || streamError.includes('RateLimitError')) {
+            friendlyMsg = 'Rate limit reached. Please wait a moment and try again, or switch to a different provider.';
+          } else if (streamError.includes('AuthenticationError')) {
+            friendlyMsg = 'Authentication failed. Please verify your API key in Settings.';
+          }
+          alert(friendlyMsg);
+        } else if (this.outputText.trim()) {
+          // Only run detector audit if we actually got output
+          this.runFullDetectorAudit();
+        }
 
       } catch (err) {
         console.error('Streaming error:', err);
-        alert('Connection error occurred: ' + err.message);
+        alert('Connection error: ' + err.message);
       } finally {
         this.isStreaming = false;
       }
