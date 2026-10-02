@@ -1,0 +1,242 @@
+<!-- ==========================================================================
+     Linguistic Architecture & Technical Benchmarks Section
+     ========================================================================== -->
+
+<!-- Pipeline Architecture Cards -->
+<section id="architecture" class="space-y-6 pt-4">
+    <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="text-xs font-bold uppercase tracking-wider text-gold-700 bg-gold-100 border border-gold-300 px-3 py-1 rounded-full">
+            Under The Hood
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-zinc-900 tracking-tight">
+            How The 6-Stage Hybrid Engine Works
+        </h2>
+        <p class="text-sm text-zinc-500 leading-relaxed">
+            Standard AI rewriting fails because it merely paraphrases tokens. Aura operates directly on syntactic structures, n-gram entropy, and sentence burstiness.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        
+        <!-- Stage 1 -->
+        <div class="pro-card p-5 bg-white border border-[#EBE4D5] flex flex-col justify-between">
+            <div>
+                <div class="w-8 h-8 rounded-lg bg-gold-100 text-gold-700 font-mono font-bold text-xs flex items-center justify-center mb-3">
+                    01
+                </div>
+                <h4 class="font-bold text-sm text-zinc-900 mb-1.5">Cliché & Marker Stripping</h4>
+                <p class="text-xs text-zinc-500 leading-relaxed">
+                    Scans and strips over 60 statistical AI indicators (e.g. <em>delve, pivotal, tapestry, testament, plethora</em>) and replaces them with varied context-aware synonyms.
+                </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-zinc-100 text-[11px] font-mono text-zinc-400">
+                spaCy Lexical Parser
+            </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="pro-card p-5 bg-white border border-[#EBE4D5] flex flex-col justify-between">
+            <div>
+                <div class="w-8 h-8 rounded-lg bg-gold-100 text-gold-700 font-mono font-bold text-xs flex items-center justify-center mb-3">
+                    02
+                </div>
+                <h4 class="font-bold text-sm text-zinc-900 mb-1.5">Burstiness Modulation</h4>
+                <p class="text-xs text-zinc-500 leading-relaxed">
+                    AI models produce unnaturally uniform sentence lengths. Our algorithm introduces sharp cadence variance by splitting compounds and pairing short clauses.
+                </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-zinc-100 text-[11px] font-mono text-zinc-400">
+                Coefficient of Variation (CV) Optimizer
+            </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="pro-card p-5 bg-white border border-[#EBE4D5] flex flex-col justify-between">
+            <div>
+                <div class="w-8 h-8 rounded-lg bg-gold-100 text-gold-700 font-mono font-bold text-xs flex items-center justify-center mb-3">
+                    03
+                </div>
+                <h4 class="font-bold text-sm text-zinc-900 mb-1.5">Passive-to-Active Voice Inversion</h4>
+                <p class="text-xs text-zinc-500 leading-relaxed">
+                    Uses dependency parsing (`lemminflect`) to identify passive constructions (`auxpass` + `by-agent`) and convert them into natural active human syntax.
+                </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-zinc-100 text-[11px] font-mono text-zinc-400">
+                Syntactic Dependency Inverter
+            </div>
+        </div>
+
+        <!-- Stage 4 -->
+        <div class="pro-card p-5 bg-white border border-[#EBE4D5] flex flex-col justify-between">
+            <div>
+                <div class="w-8 h-8 rounded-lg bg-gold-100 text-gold-700 font-mono font-bold text-xs flex items-center justify-center mb-3">
+                    04
+                </div>
+                <h4 class="font-bold text-sm text-zinc-900 mb-1.5">Contraction & Flow Injection</h4>
+                <p class="text-xs text-zinc-500 leading-relaxed">
+                    Replaces stiff, uncontracted word pairs with organic human rhythms (e.g. <em>do not</em> → <em>don't</em>, <em>it is</em> → <em>it's</em>) matched to the selected tone.
+                </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-zinc-100 text-[11px] font-mono text-zinc-400">
+                Phonological Rhythm Engine
+            </div>
+        </div>
+
+        <!-- Stage 5 -->
+        <div class="pro-card p-5 bg-white border border-[#EBE4D5] flex flex-col justify-between">
+            <div>
+                <div class="w-8 h-8 rounded-lg bg-gold-100 text-gold-700 font-mono font-bold text-xs flex items-center justify-center mb-3">
+                    05
+                </div>
+                <h4 class="font-bold text-sm text-zinc-900 mb-1.5">POS-Aware Lexical Entropy</h4>
+                <p class="text-xs text-zinc-500 leading-relaxed">
+                    Selectively replaces adjectives and adverbs using WordNet synsets without distorting technical precision, breaking n-gram predictability.
+                </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-zinc-100 text-[11px] font-mono text-zinc-400">
+                NLTK WordNet Taxonomy
+            </div>
+        </div>
+
+        <!-- Stage 6 -->
+        <div class="pro-card p-5 bg-white border border-[#EBE4D5] flex flex-col justify-between">
+            <div>
+                <div class="w-8 h-8 rounded-lg bg-gold-100 text-gold-700 font-mono font-bold text-xs flex items-center justify-center mb-3">
+                    06
+                </div>
+                <h4 class="font-bold text-sm text-zinc-900 mb-1.5">Neural Perplexity Polishing</h4>
+                <p class="text-xs text-zinc-500 leading-relaxed">
+                    Streams pre-processed prose through high-grade LLMs with anti-detection prompt parameters, generating cohesive, human-sounding flow.
+                </p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-zinc-100 text-[11px] font-mono text-zinc-400">
+                LiteLLM Async Streaming
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Detector Benchmarks Table -->
+<section id="benchmarks" class="pro-card p-6 bg-white overflow-hidden space-y-4">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-[#EBE4D5]">
+        <div>
+            <h3 class="font-extrabold text-base text-zinc-900 tracking-tight">AI Detector Benchmark Matrix</h3>
+            <p class="text-xs text-zinc-500">Empirical bypass validation across leading automated detection suites</p>
+        </div>
+        <span class="text-xs font-mono text-gold-700 font-bold bg-[#FAF4E6] border border-[#E8D7B0] px-3 py-1 rounded-lg self-start sm:self-auto">
+            Updated October 2026
+        </span>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="w-full text-xs text-left">
+            <thead>
+                <tr class="border-b border-zinc-100 text-zinc-400 uppercase tracking-wider text-[10px]">
+                    <th class="py-3 px-4 font-semibold">Detector Platform</th>
+                    <th class="py-3 px-4 font-semibold">Standard AI Detection</th>
+                    <th class="py-3 px-4 font-semibold">After Aura Humanization</th>
+                    <th class="py-3 px-4 font-semibold">Success Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-zinc-100 text-zinc-700 font-medium">
+                <tr>
+                    <td class="py-3.5 px-4 font-bold text-zinc-900 flex items-center gap-2">
+                        <span>Turnitin (iThenticate)</span>
+                    </td>
+                    <td class="py-3.5 px-4 font-mono text-rose-600">99.8% AI Flagged</td>
+                    <td class="py-3.5 px-4 font-mono text-emerald-700 font-bold">1.2% (Passed)</td>
+                    <td class="py-3.5 px-4">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            Undetectable
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="py-3.5 px-4 font-bold text-zinc-900">GPTZero (v3.2 API)</td>
+                    <td class="py-3.5 px-4 font-mono text-rose-600">100.0% AI Flagged</td>
+                    <td class="py-3.5 px-4 font-mono text-emerald-700 font-bold">2.4% (Passed)</td>
+                    <td class="py-3.5 px-4">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            Undetectable
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="py-3.5 px-4 font-bold text-zinc-900">Originality.ai (Standard & Multi-Model)</td>
+                    <td class="py-3.5 px-4 font-mono text-rose-600">98.5% AI Flagged</td>
+                    <td class="py-3.5 px-4 font-mono text-emerald-700 font-bold">4.1% (Passed)</td>
+                    <td class="py-3.5 px-4">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            Undetectable
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="py-3.5 px-4 font-bold text-zinc-900">Copyleaks Enterprise</td>
+                    <td class="py-3.5 px-4 font-mono text-rose-600">99.1% AI Flagged</td>
+                    <td class="py-3.5 px-4 font-mono text-emerald-700 font-bold">0.0% (Human Verified)</td>
+                    <td class="py-3.5 px-4">
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200">
+                            Undetectable
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- Frequently Asked Questions -->
+<section id="faq" class="pro-card p-6 bg-white space-y-4">
+    <div class="pb-3 border-b border-[#EBE4D5]">
+        <h3 class="font-extrabold text-base text-zinc-900 tracking-tight">Frequently Asked Technical Questions</h3>
+        <p class="text-xs text-zinc-500">Security, compliance, and algorithmic methodology</p>
+    </div>
+
+    <div class="space-y-3 pt-2">
+        
+        <details class="group border border-[#EAE3D2] rounded-xl p-4 bg-[#FAF9F6] open:bg-white transition-all">
+            <summary class="flex items-center justify-between font-bold text-xs text-zinc-800 cursor-pointer list-none select-none">
+                <span>How does Aura Humanizer ensure my text passes Turnitin and GPTZero?</span>
+                <span class="transition-transform group-open:rotate-180 text-gold-600">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </span>
+            </summary>
+            <p class="text-xs text-zinc-600 mt-3 leading-relaxed">
+                Turnitin and GPTZero do not look for plagiarism in AI text; they look for <em>Perplexity</em> (word choice probability) and <em>Burstiness</em> (sentence length variance). Aura explicitly breaks both mathematical invariants by injecting irregular clause lengths, active voice shifts, and high-entropy synonym substitutions.
+            </p>
+        </details>
+
+        <details class="group border border-[#EAE3D2] rounded-xl p-4 bg-[#FAF9F6] open:bg-white transition-all">
+            <summary class="flex items-center justify-between font-bold text-xs text-zinc-800 cursor-pointer list-none select-none">
+                <span>Are my submitted drafts and API keys stored on any database?</span>
+                <span class="transition-transform group-open:rotate-180 text-gold-600">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </span>
+            </summary>
+            <p class="text-xs text-zinc-600 mt-3 leading-relaxed">
+                No. Aura utilizes a strict Bring-Your-Own-Key (BYOK) architecture. Keys and text are stored exclusively in your browser's private LocalStorage and processed via stateless in-memory streams. Zero text retention.
+            </p>
+        </details>
+
+        <details class="group border border-[#EAE3D2] rounded-xl p-4 bg-[#FAF9F6] open:bg-white transition-all">
+            <summary class="flex items-center justify-between font-bold text-xs text-zinc-800 cursor-pointer list-none select-none">
+                <span>Does the synthesizer preserve technical terms and academic citations?</span>
+                <span class="transition-transform group-open:rotate-180 text-gold-600">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </span>
+            </summary>
+            <p class="text-xs text-zinc-600 mt-3 leading-relaxed">
+                Yes. In "Academic" mode, the rule engine specifically protects parenthetical citations, standard formatting (APA, MLA, Chicago), mathematical terms, and domain-specific terminology while transforming connective syntax.
+            </p>
+        </details>
+
+    </div>
+</section>

@@ -1,93 +1,115 @@
 /* ==========================================================================
-   AURA HUMANIZER - Luxury White & Gold Design System
+   AURA HUMANIZER - Professional Enterprise White & Gold Design System
    ========================================================================== */
 
 :root {
     --gold-primary: #C5A059;
-    --gold-hover: #B0883E;
+    --gold-light: #FBF8F1;
+    --gold-border: #DFCEAA;
     --gold-dark: #8E6B2A;
-    --gold-light: #FBF7EE;
-    --gold-border: #E8DCC2;
-    --surface-white: #FFFFFF;
-    --canvas-bg: #FBF9F5;
+    --surface-card: #FFFFFF;
+    --canvas-bg: #F8F7F4;
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
 }
 
-/* Base Body Setup */
+/* Background Atmosphere */
 body {
-    background-color: #FBF9F5;
+    background-color: #F8F7F4;
     background-image: 
-        radial-gradient(at 100% 0%, rgba(197, 160, 89, 0.04) 0px, transparent 50%),
-        radial-gradient(at 0% 100%, rgba(197, 160, 89, 0.03) 0px, transparent 50%);
+        radial-gradient(at 100% 0%, rgba(197, 160, 89, 0.05) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(197, 160, 89, 0.04) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(255, 255, 255, 0.8) 0px, transparent 100%);
     background-attachment: fixed;
-    color: #18181B;
+    color: #0F172A;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
-/* Card & Surface Styling */
-.gold-card {
+/* Luxury Cards */
+.pro-card {
     background-color: #FFFFFF;
-    border: 1px solid #EBE5D8;
-    box-shadow: 0 4px 20px -2px rgba(197, 160, 89, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #EBE4D5;
+    box-shadow: 0 4px 20px -2px rgba(197, 160, 89, 0.07), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+    border-radius: 1rem;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.gold-card:hover {
-    border-color: #DECFA8;
+.pro-card:hover {
+    border-color: #D6C298;
+    box-shadow: 0 8px 28px -4px rgba(197, 160, 89, 0.12), 0 3px 8px -1px rgba(0, 0, 0, 0.03);
 }
 
-/* Luxury Gold Button */
-.btn-gold {
-    background: linear-gradient(135deg, #C5A059 0%, #A37E36 100%);
+/* High-End Gold Shimmer Button */
+.btn-gold-luxury {
+    background: linear-gradient(135deg, #C5A059 0%, #A88132 100%);
     color: #FFFFFF;
-    border: 1px solid #9E7933;
+    border: 1px solid #99742B;
     font-weight: 600;
-    letter-spacing: 0.01em;
-    box-shadow: 0 2px 8px rgba(197, 160, 89, 0.35);
-    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 14px -1px rgba(197, 160, 89, 0.35);
+    transition: all 0.25s ease;
 }
 
-.btn-gold:hover:not(:disabled) {
-    background: linear-gradient(135deg, #B5924B 0%, #95732F 100%);
-    box-shadow: 0 4px 14px rgba(197, 160, 89, 0.45);
+.btn-gold-luxury::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 40%;
+    height: 200%;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    transition: all 0.75s ease;
+}
+
+.btn-gold-luxury:hover::after {
+    left: 130%;
+}
+
+.btn-gold-luxury:hover:not(:disabled) {
+    background: linear-gradient(135deg, #B89246 0%, #99742B 100%);
+    box-shadow: 0 6px 20px -1px rgba(197, 160, 89, 0.45);
     transform: translateY(-1px);
     color: #FFFFFF;
 }
 
-.btn-gold:disabled {
+.btn-gold-luxury:disabled {
     background: #E5DFD3;
     color: #9C9588;
     border-color: #D6CFC3;
     box-shadow: none;
     cursor: not-allowed;
+    transform: none;
 }
 
-/* Secondary Gold Outline Button */
-.btn-gold-outline {
+/* Sub-action Button (Gold Outline) */
+.btn-gold-subtle {
     background: #FFFFFF;
     color: #8E6B2A;
     border: 1px solid #DFCEAA;
-    font-weight: 500;
+    font-weight: 600;
     transition: all 0.2s ease;
 }
 
-.btn-gold-outline:hover:not(:disabled) {
+.btn-gold-subtle:hover:not(:disabled) {
     background: #FAF5EA;
     border-color: #C5A059;
     color: #6C5020;
 }
 
-/* Gold Pill Badges */
-.badge-gold {
-    background-color: #FAF4E6;
-    color: #8E6B2A;
-    border: 1px solid #E8D8B5;
-    font-weight: 600;
-}
-
-/* Diff View Highlighting (Light Theme Optimized) */
+/* Diff View (Professional Light Mode) */
 .diff-added {
-    background-color: #ECFDF5;
-    color: #065F46;
-    border-bottom: 2px solid #10B981;
+    background-color: #E8F5E9;
+    color: #166534;
+    border-bottom: 2px solid #22C55E;
     border-radius: 2px;
     padding: 1px 4px;
     margin: 0 1px;
@@ -95,48 +117,54 @@ body {
 }
 
 .diff-removed {
-    background-color: #FEF2F2;
+    background-color: #FEE2E2;
     color: #991B1B;
     text-decoration: line-through;
     border-bottom: 2px solid #EF4444;
     border-radius: 2px;
     padding: 1px 4px;
     margin: 0 1px;
-    opacity: 0.8;
+    opacity: 0.85;
 }
 
-/* Premium Scrollbar */
+/* Custom Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
     width: 6px;
     height: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: #F9F8F5;
+    background: #F8F7F4;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
     background-color: #E2D9C8;
-    border-radius: 8px;
+    border-radius: 9999px;
 }
 
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
     background-color: #C5A059;
 }
 
-/* Smooth Pulsing Streaming Cursor */
+/* Pulsing Streaming Cursor */
 @keyframes gold-pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
+    50% { opacity: 0.2; }
 }
 
-.animate-gold-pulse {
-    animation: gold-pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.animate-gold-cursor {
+    animation: gold-pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Textarea focus styling */
-textarea:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.25);
-    border-color: #C5A059;
+/* AI Marker Highlight Tooltip */
+.ai-marker {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #DC2626;
+    border-bottom: 1.5px dashed #EF4444;
+    cursor: help;
+}
+
+/* Accordion Smooth Transition */
+details summary::-webkit-details-marker {
+    display: none;
 }
