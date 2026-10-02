@@ -1,0 +1,52 @@
+<dialog id="settings_modal" class="modal" :class="{'modal-open': showSettings}">
+    <div class="modal-box">
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2" @click="showSettings = false">✕</button>
+        </form>
+        <h3 class="font-bold text-lg mb-4 flex items-center gap-2">⚙️ API Settings</h3>
+        
+        <p class="text-sm text-base-content/70 mb-6 bg-base-200 p-3 rounded-lg border border-base-300">
+            ℹ️ Keys are stored locally in your browser and never sent to our server for storage. They are only sent in request headers for the humanizer engine.
+        </p>
+
+        <div class="space-y-4">
+            <!-- OpenAI -->
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text">OpenAI API Key</span></label>
+                <input type="password" placeholder="sk-..." class="input input-bordered w-full" x-model="apiKeys.openai" />
+            </div>
+
+            <!-- Gemini -->
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text">Gemini API Key</span></label>
+                <input type="password" placeholder="AIza..." class="input input-bordered w-full" x-model="apiKeys.gemini" />
+            </div>
+
+            <!-- Groq -->
+            <div class="form-control w-full">
+                <label class="label"><span class="label-text">Groq API Key</span></label>
+                <input type="password" placeholder="gsk_..." class="input input-bordered w-full" x-model="apiKeys.groq" />
+            </div>
+            
+            <!-- Sapling (Detection) -->
+            <div class="form-control w-full">
+                <label class="label">
+                    <span class="label-text">Sapling API Key (Optional)</span>
+                    <span class="label-text-alt text-base-content/50">For AI detection</span>
+                </label>
+                <input type="password" class="input input-bordered w-full" x-model="apiKeys.sapling" />
+            </div>
+        </div>
+
+        <div class="modal-action mt-6 flex justify-between">
+            <button class="btn btn-ghost text-error" @click="clearApiKeys()">Clear All</button>
+            <div class="flex gap-2">
+                <button class="btn" @click="showSettings = false">Cancel</button>
+                <button class="btn btn-primary" @click="saveApiKeys()">Save Keys</button>
+            </div>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button @click="showSettings = false">close</button>
+    </form>
+</dialog>

@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.11"
+        cache: 'pip'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest httpx ruff
+        
+    - name: Download NLP models
+      run: |
+        python -m spacy download en_core_web_sm
+        python -c "import nltk; nltk.download('wordnet'); nltk.download('omw-1.4')"
+        
+    - name: Lint with Ruff
+      run: |
+        ruff check .
+        ruff format --check .
+        
+    - name: Test with pytest
+      run: |
+        pytest tests/ -v

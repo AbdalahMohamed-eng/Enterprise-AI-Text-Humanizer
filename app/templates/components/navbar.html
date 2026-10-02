@@ -1,0 +1,23 @@
+<div class="navbar bg-base-100 shadow-sm px-4 lg:px-8 shrink-0">
+    <div class="flex-1">
+        <a class="text-xl font-bold flex items-center gap-2 text-primary">
+            <span class="text-2xl">🧠🤖</span>
+            AI Text Humanizer
+        </a>
+    </div>
+    <div class="flex-none gap-4">
+        <!-- Theme Toggle -->
+        <label class="swap swap-rotate btn btn-ghost btn-circle">
+            <input type="checkbox" @click="toggleTheme()" :checked="!isDarkTheme" />
+            <!-- sun icon -->
+            <span class="swap-on text-xl">☀️</span>
+            <!-- moon icon -->
+            <span class="swap-off text-xl">🌙</span>
+        </label>
+        
+        <!-- Settings Button -->
+        <button class="btn btn-ghost btn-circle" @click="showSettings = true" title="Settings">
+            <span class="text-xl">⚙️</span>
+        </button>
+    </div>
+</div>

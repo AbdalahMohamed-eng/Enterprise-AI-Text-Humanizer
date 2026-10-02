@@ -1,0 +1,26 @@
+<div class="bg-base-100 p-4 rounded-box shadow border border-base-300 flex flex-wrap gap-4 justify-between items-center text-sm">
+    <div class="flex gap-4">
+        <!-- AI Scores -->
+        <div class="flex items-center gap-2" x-show="inputAiScore !== null || outputAiScore !== null">
+            <span class="font-semibold text-base-content/70">Detection:</span>
+            
+            <template x-if="inputAiScore !== null">
+                <div class="badge" 
+                     :class="{'badge-error': inputAiScore > 70, 'badge-warning': inputAiScore > 30 && inputAiScore <= 70, 'badge-success': inputAiScore <= 30}">
+                    Before: <span x-text="inputAiScore + '% AI'"></span>
+                </div>
+            </template>
+            
+            <template x-if="outputAiScore !== null">
+                <div class="badge" 
+                     :class="{'badge-error': outputAiScore > 70, 'badge-warning': outputAiScore > 30 && outputAiScore <= 70, 'badge-success': outputAiScore <= 30}">
+                    After: <span x-text="outputAiScore + '% AI'"></span>
+                </div>
+            </template>
+        </div>
+    </div>
+    
+    <div class="flex gap-4 text-base-content/60">
+        <!-- Optional extra stats can go here -->
+    </div>
+</div>

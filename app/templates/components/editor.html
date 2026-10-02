@@ -1,0 +1,57 @@
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[500px]">
+    <!-- Left Panel (Input) -->
+    <div class="flex flex-col bg-base-100 rounded-box shadow-lg border border-base-300">
+        <div class="flex justify-between items-center p-3 border-b border-base-300 bg-base-200 rounded-t-box">
+            <h3 class="font-semibold flex items-center gap-2 text-base-content">
+                <span>📝</span> Input
+            </h3>
+            <div class="badge badge-neutral badge-sm" x-text="inputWordCount + ' words'"></div>
+        </div>
+        <textarea 
+            class="textarea textarea-ghost w-full h-full resize-none p-4 focus:outline-none focus:bg-base-200 transition-colors custom-scrollbar" 
+            placeholder="Paste your AI-generated text here..."
+            x-model="inputText"
+        ></textarea>
+    </div>
+
+    <!-- Right Panel (Output) -->
+    <div class="flex flex-col bg-base-100 rounded-box shadow-lg border border-base-300 relative">
+        <div class="flex justify-between items-center p-3 border-b border-base-300 bg-base-200 rounded-t-box">
+            <h3 class="font-semibold flex items-center gap-2 text-base-content">
+                <span>✨</span> Output
+            </h3>
+            <div class="badge badge-neutral badge-sm" x-text="outputWordCount + ' words'"></div>
+        </div>
+        
+        <div class="flex-1 p-4 overflow-y-auto custom-scrollbar relative bg-base-100">
+            <!-- Normal Output View -->
+            <div x-show="!showDiff" class="whitespace-pre-wrap text-base leading-relaxed" 
+                 :class="{'animate-pulse-subtle': isStreaming, 'text-base-content/50': !outputText && !isStreaming}">
+                <template x-if="outputText">
+                    <span x-text="outputText"></span>
+                </template>
+                <template x-if="!outputText && !isStreaming">
+                    <span>Your humanized text will appear here...</span>
+                </template>
+                <span x-show="isStreaming" class="inline-block w-2 h-4 bg-primary ml-1 animate-ping"></span>
+            </div>
+            
+            <!-- Diff View -->
+            <div x-show="showDiff" x-html="diffHtml" class="whitespace-pre-wrap text-base leading-relaxed font-mono text-sm"></div>
+        </div>
+        
+        <!-- Actions Row -->
+        <div class="p-3 border-t border-base-300 bg-base-200 flex flex-wrap gap-2 justify-end rounded-b-box">
+            <button class="btn btn-sm" @click="checkAiScore()" :disabled="isDetecting || !inputText.trim()">
+                <span x-show="!isDetecting">🔍 Check AI Score</span>
+                <span x-show="isDetecting" class="loading loading-spinner loading-xs"></span>
+            </button>
+            <button class="btn btn-sm" @click="toggleDiff()" :disabled="!outputText.trim()" :class="{'btn-active': showDiff}">
+                <span x-text="showDiff ? '👁️ Hide Diff' : '🔄 Show Diff'"></span>
+            </button>
+            <button id="copy-btn" class="btn btn-sm btn-secondary" @click="copyOutput()" :disabled="!outputText.trim()">
+                📋 Copy
+            </button>
+        </div>
+    </div>
+</div>
