@@ -1,64 +1,142 @@
-/* Diff highlighting */
-.diff-added {
-    background-color: rgba(34, 197, 94, 0.2); /* Tailwind green-500 with opacity */
-    color: #4ade80; /* Tailwind green-400 */
-    border-radius: 2px;
-    padding: 0 2px;
+/* ==========================================================================
+   AURA HUMANIZER - Luxury White & Gold Design System
+   ========================================================================== */
+
+:root {
+    --gold-primary: #C5A059;
+    --gold-hover: #B0883E;
+    --gold-dark: #8E6B2A;
+    --gold-light: #FBF7EE;
+    --gold-border: #E8DCC2;
+    --surface-white: #FFFFFF;
+    --canvas-bg: #FBF9F5;
 }
 
-[data-theme="light"] .diff-added {
-    background-color: rgba(34, 197, 94, 0.2);
-    color: #166534;
+/* Base Body Setup */
+body {
+    background-color: #FBF9F5;
+    background-image: 
+        radial-gradient(at 100% 0%, rgba(197, 160, 89, 0.04) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(197, 160, 89, 0.03) 0px, transparent 50%);
+    background-attachment: fixed;
+    color: #18181B;
+}
+
+/* Card & Surface Styling */
+.gold-card {
+    background-color: #FFFFFF;
+    border: 1px solid #EBE5D8;
+    box-shadow: 0 4px 20px -2px rgba(197, 160, 89, 0.08), 0 2px 6px -1px rgba(0, 0, 0, 0.03);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gold-card:hover {
+    border-color: #DECFA8;
+}
+
+/* Luxury Gold Button */
+.btn-gold {
+    background: linear-gradient(135deg, #C5A059 0%, #A37E36 100%);
+    color: #FFFFFF;
+    border: 1px solid #9E7933;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    box-shadow: 0 2px 8px rgba(197, 160, 89, 0.35);
+    transition: all 0.2s ease;
+}
+
+.btn-gold:hover:not(:disabled) {
+    background: linear-gradient(135deg, #B5924B 0%, #95732F 100%);
+    box-shadow: 0 4px 14px rgba(197, 160, 89, 0.45);
+    transform: translateY(-1px);
+    color: #FFFFFF;
+}
+
+.btn-gold:disabled {
+    background: #E5DFD3;
+    color: #9C9588;
+    border-color: #D6CFC3;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* Secondary Gold Outline Button */
+.btn-gold-outline {
+    background: #FFFFFF;
+    color: #8E6B2A;
+    border: 1px solid #DFCEAA;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-gold-outline:hover:not(:disabled) {
+    background: #FAF5EA;
+    border-color: #C5A059;
+    color: #6C5020;
+}
+
+/* Gold Pill Badges */
+.badge-gold {
+    background-color: #FAF4E6;
+    color: #8E6B2A;
+    border: 1px solid #E8D8B5;
+    font-weight: 600;
+}
+
+/* Diff View Highlighting (Light Theme Optimized) */
+.diff-added {
+    background-color: #ECFDF5;
+    color: #065F46;
+    border-bottom: 2px solid #10B981;
+    border-radius: 2px;
+    padding: 1px 4px;
+    margin: 0 1px;
+    font-weight: 500;
 }
 
 .diff-removed {
-    background-color: rgba(239, 68, 68, 0.2); /* Tailwind red-500 with opacity */
-    color: #f87171; /* Tailwind red-400 */
+    background-color: #FEF2F2;
+    color: #991B1B;
     text-decoration: line-through;
+    border-bottom: 2px solid #EF4444;
     border-radius: 2px;
-    padding: 0 2px;
+    padding: 1px 4px;
+    margin: 0 1px;
+    opacity: 0.8;
 }
 
-[data-theme="light"] .diff-removed {
-    background-color: rgba(239, 68, 68, 0.2);
-    color: #991b1b;
-}
-
-/* Custom Scrollbar for Textareas and Panels */
+/* Premium Scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
+    background: #F9F8F5;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.3);
-    border-radius: 10px;
+    background-color: #E2D9C8;
+    border-radius: 8px;
 }
 
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
-    background-color: rgba(156, 163, 175, 0.5);
+    background-color: #C5A059;
 }
 
-/* Smooth Panel Transitions */
-.flex-1 {
-    transition: all 0.3s ease;
-}
-
-/* Subtle pulse for text generation */
-@keyframes pulse-subtle {
+/* Smooth Pulsing Streaming Cursor */
+@keyframes gold-pulse {
     0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
+    50% { opacity: 0.3; }
 }
 
-.animate-pulse-subtle {
-    animation: pulse-subtle 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+.animate-gold-pulse {
+    animation: gold-pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Prevent textarea resizing breaking grid layout */
-textarea {
-    resize: none;
+/* Textarea focus styling */
+textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.25);
+    border-color: #C5A059;
 }

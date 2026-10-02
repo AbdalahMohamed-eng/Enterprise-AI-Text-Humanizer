@@ -1,23 +1,54 @@
-<div class="navbar bg-base-100 shadow-sm px-4 lg:px-8 shrink-0">
-    <div class="flex-1">
-        <a class="text-xl font-bold flex items-center gap-2 text-primary">
-            <span class="text-2xl">🧠🤖</span>
-            AI Text Humanizer
-        </a>
-    </div>
-    <div class="flex-none gap-4">
-        <!-- Theme Toggle -->
-        <label class="swap swap-rotate btn btn-ghost btn-circle">
-            <input type="checkbox" @click="toggleTheme()" :checked="!isDarkTheme" />
-            <!-- sun icon -->
-            <span class="swap-on text-xl">☀️</span>
-            <!-- moon icon -->
-            <span class="swap-off text-xl">🌙</span>
-        </label>
+<header class="bg-white/90 backdrop-blur-md border-b border-[#EBE4D5] sticky top-0 z-30 px-4 lg:px-8 py-3 shrink-0">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
         
-        <!-- Settings Button -->
-        <button class="btn btn-ghost btn-circle" @click="showSettings = true" title="Settings">
-            <span class="text-xl">⚙️</span>
-        </button>
+        <!-- Brand / Logo -->
+        <div class="flex items-center gap-3">
+            <!-- Custom Geometric Gold Emblem SVG -->
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#DFBE73] via-[#C5A059] to-[#9A762E] p-0.5 shadow-gold-sm flex items-center justify-center">
+                <div class="w-full h-full bg-white rounded-[10px] flex items-center justify-center">
+                    <svg class="w-5 h-5 text-gold-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl font-extrabold tracking-tight text-zinc-900 font-sans">AURA</span>
+                    <span class="text-xl font-medium tracking-tight text-gold-600">HUMANIZER</span>
+                    <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase bg-[#FAF3E3] text-[#8E6B2A] border border-[#E8D7B0]">
+                        Pro v1.0
+                    </span>
+                </div>
+                <span class="text-[11px] font-medium text-zinc-400 tracking-wide uppercase">Enterprise NLP Text Synthesizer</span>
+            </div>
+        </div>
+
+        <!-- Right Navigation & Actions -->
+        <div class="flex items-center gap-3">
+            
+            <!-- Real-time Engine Status Badge -->
+            <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#FAF9F5] border border-[#EBE4D5] text-xs font-medium text-zinc-600">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span>Hybrid Engine Active</span>
+            </div>
+
+            <!-- API Configuration Button -->
+            <button 
+                @click="showSettings = true" 
+                class="flex items-center gap-2 px-3.5 py-1.5 rounded-lg border border-[#DFCEAA] bg-white text-zinc-700 hover:bg-[#FAF5EC] hover:text-gold-800 hover:border-gold-500 transition-all text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-gold-400/30"
+                title="Configure LLM API Keys"
+            >
+                <svg class="w-4 h-4 text-gold-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
+                <span>API Settings</span>
+            </button>
+
+        </div>
     </div>
-</div>
+</header>

@@ -1,57 +1,191 @@
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[500px]">
-    <!-- Left Panel (Input) -->
-    <div class="flex flex-col bg-base-100 rounded-box shadow-lg border border-base-300">
-        <div class="flex justify-between items-center p-3 border-b border-base-300 bg-base-200 rounded-t-box">
-            <h3 class="font-semibold flex items-center gap-2 text-base-content">
-                <span>📝</span> Input
-            </h3>
-            <div class="badge badge-neutral badge-sm" x-text="inputWordCount + ' words'"></div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-[540px]">
+    
+    <!-- Left Panel: Original Input -->
+    <div class="gold-card rounded-2xl flex flex-col overflow-hidden">
+        
+        <!-- Panel Header -->
+        <div class="px-5 py-3.5 border-b border-[#EBE4D5] bg-[#FDFCF9] flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-gold-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                <h3 class="font-bold text-sm text-zinc-800 tracking-wide uppercase">Original Draft</h3>
+            </div>
+
+            <!-- Stats & Quick Actions -->
+            <div class="flex items-center gap-2">
+                <button 
+                    @click="loadSample()"
+                    type="button"
+                    class="text-xs font-semibold text-gold-700 hover:text-gold-900 bg-[#FAF4E6] hover:bg-[#F3E7C9] px-2.5 py-1 rounded-md border border-[#E5D2A6] transition-all"
+                >
+                    Try Sample
+                </button>
+
+                <button 
+                    x-show="inputText.length > 0"
+                    @click="clearInput()"
+                    type="button"
+                    class="text-xs font-medium text-zinc-400 hover:text-rose-600 px-2 py-1 rounded transition-colors"
+                    title="Clear content"
+                >
+                    Clear
+                </button>
+
+                <span class="text-xs font-medium text-zinc-500 bg-white border border-[#E5DFD3] px-2.5 py-1 rounded-md">
+                    <span x-text="inputWordCount"></span> words
+                </span>
+            </div>
         </div>
-        <textarea 
-            class="textarea textarea-ghost w-full h-full resize-none p-4 focus:outline-none focus:bg-base-200 transition-colors custom-scrollbar" 
-            placeholder="Paste your AI-generated text here..."
-            x-model="inputText"
-        ></textarea>
+
+        <!-- Textarea Input Area -->
+        <div class="flex-1 p-5 bg-white relative flex flex-col">
+            <textarea 
+                class="w-full flex-1 resize-none bg-transparent text-zinc-800 placeholder-zinc-300 text-sm leading-relaxed custom-scrollbar focus:outline-none" 
+                placeholder="Paste AI-generated text here from ChatGPT, Gemini, Claude, or any LLM..."
+                x-model="inputText"
+            ></textarea>
+
+            <div class="pt-3 border-t border-[#F2ECE1] flex items-center justify-between text-xs text-zinc-400">
+                <span>Minimum 10 characters</span>
+                <span x-text="inputCharCount + ' characters'"></span>
+            </div>
+        </div>
     </div>
 
-    <!-- Right Panel (Output) -->
-    <div class="flex flex-col bg-base-100 rounded-box shadow-lg border border-base-300 relative">
-        <div class="flex justify-between items-center p-3 border-b border-base-300 bg-base-200 rounded-t-box">
-            <h3 class="font-semibold flex items-center gap-2 text-base-content">
-                <span>✨</span> Output
-            </h3>
-            <div class="badge badge-neutral badge-sm" x-text="outputWordCount + ' words'"></div>
-        </div>
+    <!-- Right Panel: Humanized Output -->
+    <div class="gold-card rounded-2xl flex flex-col overflow-hidden relative">
         
-        <div class="flex-1 p-4 overflow-y-auto custom-scrollbar relative bg-base-100">
-            <!-- Normal Output View -->
-            <div x-show="!showDiff" class="whitespace-pre-wrap text-base leading-relaxed" 
-                 :class="{'animate-pulse-subtle': isStreaming, 'text-base-content/50': !outputText && !isStreaming}">
+        <!-- Panel Header -->
+        <div class="px-5 py-3.5 border-b border-[#EBE4D5] bg-[#FDFCF9] flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-gold-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                </svg>
+                <h3 class="font-bold text-sm text-zinc-800 tracking-wide uppercase">Humanized Prose</h3>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <span x-show="outputWordCount > 0" class="text-xs font-medium text-zinc-500 bg-white border border-[#E5DFD3] px-2.5 py-1 rounded-md">
+                    <span x-text="outputWordCount"></span> words
+                </span>
+
+                <span x-show="outputWordCount > 0" class="text-xs font-medium text-gold-800 bg-[#FAF4E6] border border-[#E8D7B0] px-2.5 py-1 rounded-md">
+                    ~<span x-text="readingTimeMinutes"></span> min read
+                </span>
+            </div>
+        </div>
+
+        <!-- Output Viewport -->
+        <div class="flex-1 p-5 overflow-y-auto custom-scrollbar relative bg-white">
+            
+            <!-- Standard Formatted Output -->
+            <div 
+                x-show="!showDiff" 
+                class="whitespace-pre-wrap text-sm leading-relaxed text-zinc-800"
+                :class="{'animate-pulse': isStreaming, 'text-zinc-300 italic': !outputText && !isStreaming}"
+            >
                 <template x-if="outputText">
                     <span x-text="outputText"></span>
                 </template>
                 <template x-if="!outputText && !isStreaming">
-                    <span>Your humanized text will appear here...</span>
+                    <span>The humanized, natural output will appear here in real-time...</span>
                 </template>
-                <span x-show="isStreaming" class="inline-block w-2 h-4 bg-primary ml-1 animate-ping"></span>
+                <span x-show="isStreaming" class="inline-block w-2 h-4 bg-gold-500 ml-1 rounded-sm animate-gold-pulse"></span>
             </div>
+
+            <!-- Visual Word-Level Diff View -->
+            <div 
+                x-show="showDiff" 
+                x-html="diffHtml" 
+                class="whitespace-pre-wrap text-sm leading-relaxed font-mono bg-[#FAFAFA] p-4 rounded-xl border border-zinc-200"
+            ></div>
+
+        </div>
+
+        <!-- Footer Action Toolbar -->
+        <div class="px-5 py-3 border-t border-[#EBE4D5] bg-[#FDFCF9] flex flex-wrap items-center justify-between gap-3">
             
-            <!-- Diff View -->
-            <div x-show="showDiff" x-html="diffHtml" class="whitespace-pre-wrap text-base leading-relaxed font-mono text-sm"></div>
+            <!-- Left Tool: AI Detection Trigger -->
+            <div>
+                <button 
+                    @click="checkAiScore()" 
+                    :disabled="isDetecting || !inputText.trim()"
+                    class="btn-gold-outline px-3.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                    <template x-if="!isDetecting">
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5 text-gold-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                            <span>Verify AI Score</span>
+                        </div>
+                    </template>
+                    <template x-if="isDetecting">
+                        <div class="flex items-center gap-1.5">
+                            <svg class="animate-spin h-3.5 w-3.5 text-gold-600" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span>Auditing...</span>
+                        </div>
+                    </template>
+                </button>
+            </div>
+
+            <!-- Right Tools: Diff & Copy -->
+            <div class="flex items-center gap-2">
+                
+                <!-- Diff Toggle -->
+                <button 
+                    @click="toggleDiff()" 
+                    :disabled="!outputText.trim()"
+                    :class="showDiff ? 'bg-gold-500 text-white border-gold-600' : 'bg-white text-zinc-700 border-[#DFCEAA] hover:bg-[#FAF5EC]'"
+                    class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition-all flex items-center gap-1.5 shadow-sm disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 3 21 3 21 8"/>
+                        <line x1="4" y1="20" x2="21" y2="3"/>
+                        <polyline points="21 16 21 21 16 21"/>
+                        <line x1="15" y1="15" x2="21" y2="21"/>
+                        <line x1="4" y1="4" x2="9" y2="9"/>
+                    </svg>
+                    <span x-text="showDiff ? 'Standard View' : 'Compare Diff'"></span>
+                </button>
+
+                <!-- Copy Output Button -->
+                <button 
+                    @click="copyOutput()" 
+                    :disabled="!outputText.trim()"
+                    class="btn-gold px-4 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                    <template x-if="!copied">
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                            <span>Copy Text</span>
+                        </div>
+                    </template>
+                    <template x-if="copied">
+                        <div class="flex items-center gap-1.5 text-white">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                            <span>Copied!</span>
+                        </div>
+                    </template>
+                </button>
+
+            </div>
         </div>
-        
-        <!-- Actions Row -->
-        <div class="p-3 border-t border-base-300 bg-base-200 flex flex-wrap gap-2 justify-end rounded-b-box">
-            <button class="btn btn-sm" @click="checkAiScore()" :disabled="isDetecting || !inputText.trim()">
-                <span x-show="!isDetecting">🔍 Check AI Score</span>
-                <span x-show="isDetecting" class="loading loading-spinner loading-xs"></span>
-            </button>
-            <button class="btn btn-sm" @click="toggleDiff()" :disabled="!outputText.trim()" :class="{'btn-active': showDiff}">
-                <span x-text="showDiff ? '👁️ Hide Diff' : '🔄 Show Diff'"></span>
-            </button>
-            <button id="copy-btn" class="btn btn-sm btn-secondary" @click="copyOutput()" :disabled="!outputText.trim()">
-                📋 Copy
-            </button>
-        </div>
+
     </div>
+
 </div>

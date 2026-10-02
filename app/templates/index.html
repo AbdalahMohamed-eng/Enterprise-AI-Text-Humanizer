@@ -1,23 +1,65 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div x-data="humanizerApp()" class="flex flex-col h-screen overflow-hidden">
+<div x-data="humanizerApp()" class="flex flex-col min-h-screen bg-[#FBF9F5]">
     <!-- Navbar -->
     {% include "components/navbar.html" %}
 
-    <!-- Main Content -->
-    <main class="flex-1 overflow-y-auto p-4 lg:p-8 space-y-6">
+    <!-- Main Workspace -->
+    <main class="flex-1 p-4 lg:p-8 space-y-6">
         <div class="max-w-7xl mx-auto space-y-6">
-            <!-- Controls -->
+            
+            <!-- Value Proposition Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2">
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight text-zinc-900">
+                        AI Text Humanizer Workspace
+                    </h1>
+                    <p class="text-xs sm:text-sm text-zinc-500 mt-0.5">
+                        Eliminate robotic phrasing, modulate burstiness, and bypass AI detectors with linguistic precision.
+                    </p>
+                </div>
+                
+                <div class="flex items-center gap-3 text-xs text-zinc-400 font-medium">
+                    <span class="flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-gold-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Meaning Preserved
+                    </span>
+                    <span class="text-zinc-300">•</span>
+                    <span class="flex items-center gap-1.5">
+                        <svg class="w-3.5 h-3.5 text-gold-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                        </svg>
+                        Zero Logging
+                    </span>
+                </div>
+            </div>
+
+            <!-- Controls Bar -->
             {% include "components/controls.html" %}
 
             <!-- Editor Panels -->
             {% include "components/editor.html" %}
 
-            <!-- Stats Bar -->
+            <!-- Audit Metrics & Stats Bar -->
             {% include "components/stats_bar.html" %}
         </div>
     </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-[#EBE4D5] bg-white py-4 px-6 text-center text-xs text-zinc-400 shrink-0">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-zinc-700">AURA HUMANIZER</span>
+                <span>— Enterprise linguistic bypass architecture</span>
+            </div>
+            <div>
+                <span>Powered by FastAPI, spaCy & LiteLLM</span>
+            </div>
+        </div>
+    </footer>
 
     <!-- Settings Modal -->
     {% include "components/settings_modal.html" %}

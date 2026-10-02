@@ -11,9 +11,9 @@ document.addEventListener('alpine:init', () => {
     model: 'groq/llama-3.3-70b-versatile',
     strength: 'medium',
     showSettings: false,
-    isDarkTheme: true,
+    copied: false,
     
-    // AI Scores
+    // AI Detection Scores
     inputAiScore: null,
     outputAiScore: null,
     isDetecting: false,
@@ -32,36 +32,70 @@ document.addEventListener('alpine:init', () => {
     
     // Available models per provider
     availableModels: {
-      openai: [{id: 'gpt-4o', name: 'GPT-4o'}, {id: 'gpt-4o-mini', name: 'GPT-4o Mini'}],
-      gemini: [{id: 'gemini/gemini-2.0-flash', name: 'Gemini 2.0 Flash'}, {id: 'gemini/gemini-1.5-flash', name: 'Gemini 1.5 Flash'}],
-      groq: [{id: 'groq/llama-3.3-70b-versatile', name: 'Llama 3.3 70B'}, {id: 'groq/llama-3.1-8b-instant', name: 'Llama 3.1 8B'}]
+      groq: [
+        {id: 'groq/llama-3.3-70b-versatile', name: 'Llama 3.3 70B (Recommended)'},
+        {id: 'groq/llama-3.1-8b-instant', name: 'Llama 3.1 8B (Fast)'}
+      ],
+      openai: [
+        {id: 'gpt-4o', name: 'GPT-4o (High Quality)'},
+        {id: 'gpt-4o-mini', name: 'GPT-4o Mini (Fast)'}
+      ],
+      gemini: [
+        {id: 'gemini/gemini-2.0-flash', name: 'Gemini 2.0 Flash (Fast & Smart)'},
+        {id: 'gemini/gemini-1.5-flash', name: 'Gemini 1.5 Flash'}
+      ]
     },
     
-    // Computed
-    get inputWordCount() { return this.inputText.trim() ? this.inputText.trim().split(/\s+/).length : 0; },
-    get outputWordCount() { return this.outputText.trim() ? this.outputText.trim().split(/\s+/).length : 0; },
-    get currentModels() { return this.availableModels[this.provider] || []; },
+    // Computed Properties
+    get inputWordCount() { 
+      return this.inputText.trim() ? this.inputText.trim().split(/\s+/).length : 0; 
+    },
+    get inputCharCount() { 
+      return this.inputText.length; 
+    },
+    get outputWordCount() { 
+      return this.outputText.trim() ? this.outputText.trim().split(/\s+/).length : 0; 
+    },
+    get currentModels() { 
+      return this.availableModels[this.provider] || []; 
+    },
+    get readingTimeMinutes() {
+      const words = this.outputWordCount || this.inputWordCount;
+      if (!words) return 0;
+      return Math.max(1, Math.round(words / 200));
+    },
     
-    // Methods
+    // Lifecycle
     init() {
-      // Set initial model based on provider
       this.updateModel();
-      // Watch provider changes
       this.$watch('provider', () => this.updateModel());
-      
-      // Initialize theme based on preference or current default (dark)
-      this.isDarkTheme = true;
-      document.documentElement.setAttribute('data-theme', 'dark');
+      document.documentElement.setAttribute('data-theme', 'light');
     },
     
     updateModel() {
       const models = this.currentModels;
       if (models.length > 0) {
-        // Only change if the current model is not in the new provider's list
         if (!models.find(m => m.id === this.model)) {
-            this.model = models[0].id;
+          this.model = models[0].id;
         }
       }
+    },
+    
+    loadSample() {
+      this.inputText = "In today's fast-paced digital landscape, it is important to remember that artificial intelligence plays a pivotal role in shaping our future. Delving deeper into this phenomenon reveals a multifaceted tapestry of technological innovation. Furthermore, it serves as a testament to human ingenuity, offering a myriad of comprehensive solutions to navigate modern challenges seamlessly.";
+      this.outputText = '';
+      this.inputAiScore = null;
+      this.outputAiScore = null;
+      this.showDiff = false;
+    },
+    
+    clearInput() {
+      this.inputText = '';
+      this.outputText = '';
+      this.inputAiScore = null;
+      this.outputAiScore = null;
+      this.showDiff = false;
+      this.diffHtml = '';
     },
     
     saveApiKeys() {
@@ -78,11 +112,6 @@ document.addEventListener('alpine:init', () => {
       localStorage.removeItem('humanizer_gemini_key');
       localStorage.removeItem('humanizer_groq_key');
       localStorage.removeItem('humanizer_sapling_key');
-    },
-    
-    toggleTheme() {
-      this.isDarkTheme = !this.isDarkTheme;
-      document.documentElement.setAttribute('data-theme', this.isDarkTheme ? 'dark' : 'light');
     },
     
     async startHumanization() {
@@ -115,8 +144,8 @@ document.addEventListener('alpine:init', () => {
         });
         
         if (!response.ok) {
-          const err = await response.json();
-          alert(err.detail || 'Failed to humanize');
+          const err = await response.json().catch(() => ({}));
+          alert(err.detail || 'Unable to process request. Please ensure your API key is configured.');
           this.isStreaming = false;
           return;
         }
@@ -135,21 +164,15 @@ document.addEventListener('alpine:init', () => {
             if (line.startsWith('data: ')) {
               const data = line.slice(6);
               if (data === '[DONE]') break;
-              // Simple unescaping or parsing if it's json. Assuming raw stream
-              this.outputText += data; 
-            }
-            if (line.startsWith('event: error')) {
-               console.error("Stream error event received.");
+              this.outputText += data;
             }
           }
         }
       } catch (err) {
-        console.error('Stream error:', err);
-        alert('Connection error: ' + err.message);
+        console.error('Streaming error:', err);
+        alert('Connection error occurred: ' + err.message);
       } finally {
         this.isStreaming = false;
-        // Optionally run AI detection automatically after humanization completes
-        // this.checkAiScore(); 
       }
     },
     
@@ -158,12 +181,11 @@ document.addEventListener('alpine:init', () => {
       this.isDetecting = true;
       
       const headers = {
-          'Content-Type': 'application/json',
-          'X-Sapling-Key': this.apiKeys.sapling
+        'Content-Type': 'application/json',
+        'X-Sapling-Key': this.apiKeys.sapling
       };
 
       try {
-        // Check input score
         const inputResp = await fetch('/api/v1/detect', {
           method: 'POST',
           headers,
@@ -174,7 +196,6 @@ document.addEventListener('alpine:init', () => {
           this.inputAiScore = data.ai_score_percent;
         }
         
-        // Check output score if available
         if (this.outputText.trim() && this.outputText.trim().length >= 50) {
           const outputResp = await fetch('/api/v1/detect', {
             method: 'POST',
@@ -187,7 +208,7 @@ document.addEventListener('alpine:init', () => {
           }
         }
       } catch (err) {
-        console.error('Detection error:', err);
+        console.error('Detection evaluation error:', err);
       } finally {
         this.isDetecting = false;
       }
@@ -200,7 +221,6 @@ document.addEventListener('alpine:init', () => {
     
     computeDiff() {
       if (!window.Diff || !this.inputText || !this.outputText) return;
-      // Using word diff for better readability in UI
       const diff = Diff.diffWords(this.inputText, this.outputText);
       this.diffHtml = diff.map(part => {
         if (part.added) return `<span class="diff-added">${this.escapeHtml(part.value)}</span>`;
@@ -211,23 +231,20 @@ document.addEventListener('alpine:init', () => {
     
     escapeHtml(unsafe) {
       return unsafe
-           .replace(/&/g, "&amp;")
-           .replace(/</g, "&lt;")
-           .replace(/>/g, "&gt;")
-           .replace(/"/g, "&quot;")
-           .replace(/'/g, "&#039;");
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
     },
     
     copyOutput() {
       if (!this.outputText) return;
       navigator.clipboard.writeText(this.outputText).then(() => {
-        // Brief visual feedback
-        const btn = document.getElementById('copy-btn');
-        if (btn) { 
-            const originalText = btn.innerHTML;
-            btn.textContent = '✓ Copied!'; 
-            setTimeout(() => btn.innerHTML = '📋 Copy', 1500); 
-        }
+        this.copied = true;
+        setTimeout(() => {
+          this.copied = false;
+        }, 2000);
       });
     }
   }));
