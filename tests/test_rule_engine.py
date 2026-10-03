@@ -1,4 +1,3 @@
-import pytest
 from app.services.rule_engine.lexical_rules import LexicalRules
 from app.services.rule_engine.passive_to_active import PassiveToActive
 from app.services.rule_engine.burstiness import BurstinessModulator

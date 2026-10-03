@@ -28,9 +28,7 @@ def build_humanizer_prompt(text: str, mode: str, strength: str) -> Tuple[str, st
     }
 
     mode_instruction = mode_instructions.get(mode, mode_instructions["anti_ai"])
-    strength_instruction = strength_instructions.get(
-        strength, strength_instructions["medium"]
-    )
+    strength_instruction = strength_instructions.get(strength, strength_instructions["medium"])
 
     system_prompt = f"{base_system}\n\n4. Mode Instructions: {mode_instruction}\n\n5. Strength Instructions: {strength_instruction}"
 

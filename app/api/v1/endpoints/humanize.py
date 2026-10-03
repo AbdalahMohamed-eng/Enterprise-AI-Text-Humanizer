@@ -3,7 +3,7 @@ Humanize endpoint: Accepts text, applies rule-based preprocessing,
 then streams LLM-polished output via Server-Sent Events.
 """
 
-from fastapi import APIRouter, Header, HTTPException
+from fastapi import APIRouter, Header
 from fastapi.responses import StreamingResponse
 from typing import Optional
 
@@ -51,9 +51,7 @@ async def humanize_text(
     if request.use_rules:
         try:
             pipeline = get_pipeline()
-            text_to_process = pipeline.preprocess(
-                text_to_process, strength=request.strength.value
-            )
+            text_to_process = pipeline.preprocess(text_to_process, strength=request.strength.value)
         except Exception:
             # If rule engine fails, proceed with original text
             text_to_process = request.text

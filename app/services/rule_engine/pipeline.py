@@ -90,7 +90,7 @@ class HumanizerPipeline:
             return {"sentence_count": 0, "mean_length": 0.0, "cv_burstiness": 0.0}
 
         lengths = [len([t for t in sent if not t.is_punct]) for sent in sentences]
-        lengths = [l for l in lengths if l > 0]
+        lengths = [length for length in lengths if length > 0]
 
         if not lengths:
             return {

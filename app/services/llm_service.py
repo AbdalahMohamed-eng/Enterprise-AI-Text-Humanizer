@@ -64,11 +64,7 @@ class LLMService:
                 stream=True,
                 num_retries=1,
                 temperature=(
-                    0.85
-                    if strength == "aggressive"
-                    else 0.75
-                    if strength == "medium"
-                    else 0.65
+                    0.85 if strength == "aggressive" else 0.75 if strength == "medium" else 0.65
                 ),
             )
             has_yielded = False

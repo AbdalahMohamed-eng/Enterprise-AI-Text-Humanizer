@@ -56,9 +56,7 @@ class BurstinessModulator:
 
         # Look for coordinating conjunctions
         cc_tokens = [
-            t
-            for t in doc
-            if t.pos_ == "CCONJ" and t.text.lower() in ("and", "but", "so", "yet")
+            t for t in doc if t.pos_ == "CCONJ" and t.text.lower() in ("and", "but", "so", "yet")
         ]
 
         for cc in cc_tokens:
@@ -107,9 +105,7 @@ class BurstinessModulator:
                     # Merge them
                     separator = random.choice([" ; ", " — "])
                     clean_sent1 = sent.rstrip(".!?")
-                    clean_sent2 = (
-                        next_sent[0].lower() + next_sent[1:] if next_sent else ""
-                    )
+                    clean_sent2 = next_sent[0].lower() + next_sent[1:] if next_sent else ""
 
                     merged.append(f"{clean_sent1}{separator}{clean_sent2}")
                     i += 2

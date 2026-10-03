@@ -69,10 +69,7 @@ class EntropyBooster:
         tokens = []
 
         for token in doc:
-            if (
-                token.pos_ in ("ADJ", "ADV")
-                and token.text.lower() not in self.protected_words
-            ):
+            if token.pos_ in ("ADJ", "ADV") and token.text.lower() not in self.protected_words:
                 if random.random() <= self.swap_rate:
                     synonym = self._get_synonym(token.text.lower(), token.pos_)
                     if synonym:

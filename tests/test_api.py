@@ -1,6 +1,3 @@
-import pytest
-
-
 def test_get_root(client):
     """Test GET / returns 200 and HTML."""
     response = client.get("/")

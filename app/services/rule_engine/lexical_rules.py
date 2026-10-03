@@ -55,7 +55,6 @@ CLICHES: Dict[str, List[str]] = {
     "it is worth noting that": ["note that", "also,", "worth mentioning:"],
     "plays a pivotal role": ["is key", "is very important", "matters a lot"],
     "in the realm of": ["in", "when it comes to", "regarding"],
-    "a testament to": ["proof of", "showing", "evidence of"],
     # Transitions
     "furthermore": ["also", "plus", "in addition"],
     "moreover": ["also", "besides", "what's more"],

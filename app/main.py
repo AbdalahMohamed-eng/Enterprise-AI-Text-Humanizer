@@ -4,7 +4,6 @@ AI Text Humanizer — FastAPI Application Factory.
 Serves the web UI and API endpoints for humanizing AI-generated text.
 """
 
-import os
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -57,7 +56,7 @@ async def root(request: Request):
 async def startup_event():
     """Download required NLTK data on first startup."""
     try:
-        import nltk
+        pass
         # nltk.download("wordnet", quiet=True)
         # nltk.download("omw-1.4", quiet=True)
     except Exception:
