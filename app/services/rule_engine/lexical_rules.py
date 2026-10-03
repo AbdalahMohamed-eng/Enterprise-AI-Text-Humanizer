@@ -4,8 +4,9 @@ from typing import Dict, List
 
 # Dictionary of AI overused words/phrases mapped to natural alternatives
 CLICHES: Dict[str, List[str]] = {
-    # Verbs
-    "delve": ["look into", "explore", "examine", "dig into"],
+    # Verbs & Verb Phrases
+    "delve into": ["examine", "explore", "look into", "investigate", "dig into"],
+    "delve": ["explore", "examine", "investigate"],
     "leverage": ["use", "make use of", "utilize", "take advantage of"],
     "foster": ["encourage", "promote", "help grow", "build"],
     "navigate": ["handle", "deal with", "work through", "manage"],
@@ -15,13 +16,15 @@ CLICHES: Dict[str, List[str]] = {
     "demystify": ["explain", "simplify", "make clear"],
     "embark": ["start", "begin", "set out"],
     "encapsulate": ["sum up", "summarize", "capture"],
-    # Nouns
+    # Nouns & Noun Phrases
+    "a tapestry of": ["a blend of", "a collection of", "a mix of"],
     "tapestry": ["mix", "collection", "blend"],
+    "a testament to": ["proof of", "clear evidence of", "a reflection of"],
     "testament": ["proof", "evidence", "sign"],
-    "landscape": ["environment", "field", "scene"],
-    "realm": ["area", "field", "world"],
-    "plethora": ["lot", "wealth", "abundance", "many"],
-    "myriad": ["many", "variety", "multitude"],
+    "a plethora of": ["plenty of", "a wealth of", "an abundance of", "many"],
+    "plethora": ["abundance", "wealth", "wide range"],
+    "a myriad of": ["countless", "a wide range of", "many", "numerous"],
+    "myriad": ["countless", "numerous", "diverse"],
     "paradigm": ["model", "pattern", "example"],
     "interplay": ["interaction", "relationship", "connection"],
     "cornerstone": ["foundation", "basis", "key part"],

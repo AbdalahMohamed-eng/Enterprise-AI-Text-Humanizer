@@ -65,6 +65,7 @@ async def humanize_text(
             strength=request.strength.value,
             model=request.model,
             api_key=api_key,
+            fallback_text=text_to_process,
         ),
         media_type="text/event-stream",
         headers={

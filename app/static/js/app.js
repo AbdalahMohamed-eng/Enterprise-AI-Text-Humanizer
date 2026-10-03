@@ -8,6 +8,7 @@ function createHumanizerApp() {
     showDiff: false,
     diffHtml: '',
     copied: false,
+    streamNotice: '',
     
     // Configuration
     mode: 'anti_ai', // 'anti_ai' | 'academic' | 'formal' | 'casual'
@@ -48,17 +49,20 @@ function createHumanizerApp() {
     
     // Available Models
     availableModels: {
-      groq: [
-        {id: 'groq/llama-3.3-70b-versatile', name: 'Llama 3.3 70B Versatile (Recommended)'},
-        {id: 'groq/llama-3.1-8b-instant', name: 'Llama 3.1 8B Instant (Ultra-Fast)'}
+      local: [
+        {id: 'local/rules-engine', name: '6-Stage Linguistic Engine (Free • Instant)'}
       ],
-      openai: [
-        {id: 'gpt-4o', name: 'GPT-4o (State of the Art)'},
-        {id: 'gpt-4o-mini', name: 'GPT-4o Mini (Cost-Efficient)'}
+      groq: [
+        {id: 'groq/llama-3.3-70b-versatile', name: 'Llama 3.3 70B (Recommended)'},
+        {id: 'groq/llama-3.1-8b-instant', name: 'Llama 3.1 8B (Fast)'}
       ],
       gemini: [
         {id: 'gemini/gemini-2.0-flash', name: 'Gemini 2.0 Flash (Fast & Nuanced)'},
         {id: 'gemini/gemini-1.5-flash', name: 'Gemini 1.5 Flash'}
+      ],
+      openai: [
+        {id: 'gpt-4o', name: 'GPT-4o (State of the Art)'},
+        {id: 'gpt-4o-mini', name: 'GPT-4o Mini (Cost-Efficient)'}
       ]
     },
     
@@ -105,6 +109,12 @@ function createHumanizerApp() {
     
     // Lifecycle
     init() {
+      // If user has saved a specific key but not groq, auto-pick their configured provider
+      if (this.apiKeys.gemini && !this.apiKeys.groq) {
+        this.provider = 'gemini';
+      } else if (this.apiKeys.openai && !this.apiKeys.groq) {
+        this.provider = 'openai';
+      }
       this.updateModel();
       this.$watch('provider', () => this.updateModel());
       if (typeof document !== 'undefined') {
@@ -127,6 +137,7 @@ function createHumanizerApp() {
       this.hasAudited = false;
       this.showDiff = false;
       this.diffHtml = '';
+      this.streamNotice = '';
     },
     
     async pasteInput() {
@@ -137,10 +148,10 @@ function createHumanizerApp() {
             this.inputText = text;
           }
         } else {
-          alert('Clipboard paste access not supported by browser. Please paste with Ctrl+V / Cmd+V.');
+          alert('Please paste directly into the box with Ctrl+V or Cmd+V.');
         }
       } catch (err) {
-        alert('Clipboard permission denied. Please paste with Ctrl+V / Cmd+V.');
+        alert('Clipboard permission denied. Please paste with Ctrl+V or Cmd+V.');
       }
     },
     
@@ -152,6 +163,7 @@ function createHumanizerApp() {
       this.hasAudited = false;
       this.showDiff = false;
       this.diffHtml = '';
+      this.streamNotice = '';
       this.resetDetectorMatrix();
     },
 
@@ -164,11 +176,27 @@ function createHumanizerApp() {
     },
     
     saveApiKeys() {
-      localStorage.setItem('humanizer_openai_key', this.apiKeys.openai || '');
-      localStorage.setItem('humanizer_gemini_key', this.apiKeys.gemini || '');
-      localStorage.setItem('humanizer_groq_key', this.apiKeys.groq || '');
-      localStorage.setItem('humanizer_sapling_key', this.apiKeys.sapling || '');
+      this.apiKeys.openai = (this.apiKeys.openai || '').trim();
+      this.apiKeys.gemini = (this.apiKeys.gemini || '').trim();
+      this.apiKeys.groq = (this.apiKeys.groq || '').trim();
+      this.apiKeys.sapling = (this.apiKeys.sapling || '').trim();
+      
+      localStorage.setItem('humanizer_openai_key', this.apiKeys.openai);
+      localStorage.setItem('humanizer_gemini_key', this.apiKeys.gemini);
+      localStorage.setItem('humanizer_groq_key', this.apiKeys.groq);
+      localStorage.setItem('humanizer_sapling_key', this.apiKeys.sapling);
+      
+      // Auto-switch provider to match what user just configured
+      if (this.apiKeys.gemini && this.provider !== 'gemini' && !this.apiKeys[this.provider]) {
+        this.provider = 'gemini';
+      } else if (this.apiKeys.groq && this.provider !== 'groq' && !this.apiKeys[this.provider]) {
+        this.provider = 'groq';
+      } else if (this.apiKeys.openai && this.provider !== 'openai' && !this.apiKeys[this.provider]) {
+        this.provider = 'openai';
+      }
+      
       this.showSettings = false;
+      this.streamNotice = '';
     },
     
     clearApiKeys() {
@@ -177,6 +205,7 @@ function createHumanizerApp() {
       localStorage.removeItem('humanizer_gemini_key');
       localStorage.removeItem('humanizer_groq_key');
       localStorage.removeItem('humanizer_sapling_key');
+      this.streamNotice = '';
     },
     
     async startHumanization() {
@@ -186,13 +215,14 @@ function createHumanizerApp() {
       this.diffHtml = '';
       this.outputAiScore = null;
       this.hasAudited = false;
+      this.streamNotice = '';
       this.isStreaming = true;
       
       const headers = {
         'Content-Type': 'application/json',
-        'X-OpenAI-Key': this.apiKeys.openai || '',
-        'X-Gemini-Key': this.apiKeys.gemini || '',
-        'X-Groq-Key': this.apiKeys.groq || ''
+        'X-OpenAI-Key': (this.apiKeys.openai || '').trim(),
+        'X-Gemini-Key': (this.apiKeys.gemini || '').trim(),
+        'X-Groq-Key': (this.apiKeys.groq || '').trim()
       };
       
       try {
@@ -211,7 +241,7 @@ function createHumanizerApp() {
         
         if (!response.ok) {
           const err = await response.json().catch(() => ({}));
-          alert(err.detail || 'Processing failed. Please check your API key in Settings.');
+          this.streamNotice = err.detail || 'API key missing. Enter your key in API Settings or switch to Local Rule Engine.';
           this.isStreaming = false;
           return;
         }
@@ -226,26 +256,39 @@ function createHumanizerApp() {
           if (done) break;
           buffer += decoder.decode(value, { stream: true });
           
-          // Split on double-newline (SSE event boundary)
           const events = buffer.split('\n\n');
-          buffer = events.pop(); // Keep incomplete event in buffer
+          buffer = events.pop();
           
           for (const eventBlock of events) {
             const lines = eventBlock.split('\n');
             let eventType = 'message';
-            let eventData = '';
+            let dataLines = [];
             
             for (const line of lines) {
               if (line.startsWith('event: ')) {
                 eventType = line.slice(7).trim();
               } else if (line.startsWith('data: ')) {
-                eventData = line.slice(6);
+                dataLines.push(line.slice(6));
+              } else if (line.length > 0 && dataLines.length > 0) {
+                dataLines.push(line);
               }
             }
             
+            const eventData = dataLines.join('\n');
+            
+            if (eventType === 'warning') {
+              let cleanWarning = eventData || 'Cloud model failed. Delivered 6-stage rule humanized prose.';
+              if (cleanWarning.includes('Invalid API Key') || cleanWarning.includes('invalid_api_key')) {
+                cleanWarning = 'Invalid ' + this.provider.toUpperCase() + ' API key. Delivered humanized output via 6-Stage Local Rule Engine.';
+              } else if (cleanWarning.includes('AuthenticationError')) {
+                cleanWarning = 'Authentication failed for ' + this.provider.toUpperCase() + '. Delivered humanized output via 6-Stage Local Rule Engine.';
+              }
+              this.streamNotice = cleanWarning;
+              continue;
+            }
+            
             if (eventType === 'error') {
-              // LLM returned an error inside the stream
-              streamError = eventData || 'Unknown LLM error occurred.';
+              streamError = eventData || 'Processing error occurred.';
               break;
             }
             
@@ -262,24 +305,15 @@ function createHumanizerApp() {
         }
         
         if (streamError) {
-          // Show user-friendly error message
-          let friendlyMsg = streamError;
-          if (streamError.includes('Invalid API Key') || streamError.includes('invalid_api_key')) {
-            friendlyMsg = 'Invalid API key. Please go to API Settings and enter a valid key for the selected provider.';
-          } else if (streamError.includes('rate_limit') || streamError.includes('RateLimitError')) {
-            friendlyMsg = 'Rate limit reached. Please wait a moment and try again, or switch to a different provider.';
-          } else if (streamError.includes('AuthenticationError')) {
-            friendlyMsg = 'Authentication failed. Please verify your API key in Settings.';
-          }
-          alert(friendlyMsg);
-        } else if (this.outputText.trim()) {
-          // Only run detector audit if we actually got output
+          this.streamNotice = streamError;
+        } else if (this.outputText && this.outputText.trim()) {
+          // Auto run multi-detector verification once output completes
           this.runFullDetectorAudit();
         }
 
       } catch (err) {
         console.error('Streaming error:', err);
-        alert('Connection error: ' + err.message);
+        this.streamNotice = 'Connection error: ' + err.message;
       } finally {
         this.isStreaming = false;
       }
@@ -291,7 +325,7 @@ function createHumanizerApp() {
       
       const headers = {
         'Content-Type': 'application/json',
-        'X-Sapling-Key': this.apiKeys.sapling || ''
+        'X-Sapling-Key': (this.apiKeys.sapling || '').trim()
       };
 
       try {
